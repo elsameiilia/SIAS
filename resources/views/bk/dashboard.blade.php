@@ -14,6 +14,6 @@
             @endforeach
         </div>
         <h3>Form Bolos</h3>
-        <a href="{{ route('bk.monitoring.bolos') }}" class="btn btn-secondary mt-3">Monitoring Bolos</a>
+        <a href="{{ route('bk.bolos.index') }}" class="btn btn-secondary mt-3">Monitoring Bolos</a>
     </div>
 @endsection
