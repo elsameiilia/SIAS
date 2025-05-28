@@ -16,55 +16,55 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'nama' => 'Guru Pengajar',
+                'nama' => 'Budi',
                 'nip' => '1001',
                 'role' => 'guru_pengajar',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Guru Pengajar',
+                'nama' => 'Dedi',
                 'nip' => '1002',
                 'role' => 'guru_pengajar',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Guru Pengajar',
+                'nama' => 'Agus',
                 'nip' => '1003',
                 'role' => 'guru_pengajar',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Guru Pengajar',
+                'nama' => 'Hendra',
                 'nip' => '1004',
                 'role' => 'guru_pengajar',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Guru Pengajar',
+                    'nama' => 'Siti',
                 'nip' => '1005',
                 'role' => 'guru_pengajar',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Guru BK',
+                'nama' => 'Rina',
                 'nip' => '2001',
                 'role' => 'guru_bk',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Wakasek Kesiswaan',
+                'nama' => 'Joko',
                 'nip' => '3001',
                 'role' => 'wakasek_kesiswaan',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Wakasek Kurikulum',
+                'nama' => 'Bambang',
                 'nip' => '4001',
                 'role' => 'wakasek_kurikulum',
                 'password' => Hash::make('password')
             ],
             [
-                'nama' => 'Admin IT',
+                'nama' => 'Arya',
                 'nip' => 'admin123',
                 'role' => 'admin',
                 'password' => Hash::make('admin123')
