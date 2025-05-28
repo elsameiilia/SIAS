@@ -6,6 +6,7 @@ use App\Http\Controllers\AbsensiSiswaController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\BkDashboardController;
 use App\Http\Controllers\WakasekKurikulumController;
+use App\Http\Controllers\AdminGuruController;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/admin', fn() => view('dashboard.admin'));
+    Route::resource('guru', AdminGuruController::class)->names('admin.guru');
 });
 
 Route::get('/test-auth', function () {
