@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('absensi_guru', function (Blueprint $table) {
-            $table->id();
+            $table->id('absensi_guru_id');
+            $table->foreignId('guru_id')->constrained('users', 'id'); // Asumsikan guru termasuk dalam tabel users
+            $table->enum('status', ['hadir', 'sakit', 'izin', 'alpha']);
+            $table->text('keterangan')->nullable();
+            $table->string('bukti')->nullable();
+            $table->date('tanggal');
             $table->timestamps();
         });
     }

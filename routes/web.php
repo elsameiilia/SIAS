@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AbsensiSiswaController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\BkDashboardController;
+use App\Http\Controllers\WakasekKurikulumController;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
@@ -41,9 +42,18 @@ Route::middleware(['auth', 'role:wakasek_kesiswaan'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
-    Route::get('/dashboard/wakasek-kurikulum', fn() => view('dashboard.wakasek-kurikulum'));
+    Route::get('/wakasek/dashboard', [WakasekKurikulumController::class, 'dashboard'])->name('wakasek.dashboard');
+
+    Route::get('/wakasek/absensi-guru', [WakasekKurikulumController::class, 'absenGuruForm'])->name('wakasek.absen.guru');
+    Route::post('/wakasek/absensi-guru', [WakasekKurikulumController::class, 'simpanAbsenGuru'])->name('wakasek.absen.guru.simpan');
+
+    Route::get('/wakasek/monitoring-guru', [WakasekKurikulumController::class, 'monitoringGuru'])->name('wakasek.monitoring.guru');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/admin', fn() => view('dashboard.admin'));
+});
+
+Route::get('/test-auth', function () {
+    return auth()->user(); // Apakah ini mengembalikan user atau null?
 });
