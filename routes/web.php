@@ -8,6 +8,7 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\BkDashboardController;
 use App\Http\Controllers\WakasekKurikulumController;
 use App\Http\Controllers\AdminGuruController;
+use App\Http\Controllers\AdminSiswaController;
 
 Auth::routes();
 
@@ -69,6 +70,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
     Route::resource('guru', AdminGuruController::class)->names('admin.guru');
     Route::resource('kelas', AdminKelasController::class)->names('admin.kelas');
+    Route::resource('siswa', AdminSiswaController::class)->names('admin.siswa');
 });
 
 Route::get('/test-auth', function () {

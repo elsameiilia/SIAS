@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -23,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
 //            // Contoh validasi NIP: harus 18 digit numerik
 //            return preg_match('/^[0-9]{18}$/', $value);
 //        }, 'Format NIP tidak valid.');
+        Paginator::useBootstrapFive();
     }
 }
