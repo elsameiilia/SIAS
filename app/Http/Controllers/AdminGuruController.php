@@ -53,11 +53,11 @@ class AdminGuruController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nip' => 'required|nip|unique:users,nip,' . $guru->id,
+//            'nip' => 'required|nip|unique:users,nip,' . $guru->id,
         ]);
 
         $guru->update([
-            'nama' => $request->name,
+            'nama' => $request->nama,
             'nip' => $request->nip,
             'password' => $request->password,
         ]);

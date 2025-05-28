@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminKelasController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AbsensiSiswaController;
@@ -7,13 +8,26 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\BkDashboardController;
 use App\Http\Controllers\WakasekKurikulumController;
 use App\Http\Controllers\AdminGuruController;
-//Route::get('/', function () {
-//    return view('welcome');
-//});
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+
+    return match ($user->role) {
+        'guru_pengajar' => redirect()->route('guru.dashboard'),
+        'guru_bk' => redirect()->route('bk.dashboard'),
+        'wakasek_kesiswaan' => redirect('/dashboard/wakasek-kesiswaan'),
+        'wakasek_kurikulum' => redirect()->route('wakasek.dashboard'),
+        'admin' => redirect('/admin/dashboard'),
+        default => abort(403, 'Role tidak dikenali.'),
+    };
+});
+
 Route::middleware(['auth', 'role:guru_pengajar'])->group(function () {
     Route::get('/guru/dashboard', [GuruController::class, 'index'])->name('guru.dashboard');
     Route::get('/guru/kelas/{tingkat}', [GuruController::class, 'listSubkelas'])->name('guru.kelas.sub');
@@ -52,8 +66,9 @@ Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard/admin', fn() => view('dashboard.admin'));
+    Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
     Route::resource('guru', AdminGuruController::class)->names('admin.guru');
+    Route::resource('kelas', AdminKelasController::class)->names('admin.kelas');
 });
 
 Route::get('/test-auth', function () {

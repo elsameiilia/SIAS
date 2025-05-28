@@ -41,7 +41,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         return match ($user->role) {
-            'admin' => redirect('/dashboard/admin'),
+            'admin' => redirect('/admin/dashboard'),
             'guru_pengajar' => redirect('guru/dashboard'),
             'guru_bk' => redirect('/bk/dashboard'),
             'wakasek_kesiswaan' => redirect('/wakasek/dashboard'),
