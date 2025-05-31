@@ -10,6 +10,16 @@
                 <button class="btn btn-primary" type="submit">Cari</button>
             </div>
         </form>
+        <a href="{{ route('admin.guru.create') }}" class="btn btn-primary mb-3">Tambah Guru</a>
+        <h4>Import Data Siswa dari Excel</h4>
+        <form action="{{ route('admin.guru.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label>File Excel (.xlsx)</label>
+                <input type="file" name="file" class="form-control" accept=".xlsx" required>
+            </div>
+            <button class="btn btn-secondary">Import</button>
+        </form>
 
         <table class="table table-bordered">
             <thead>
@@ -45,4 +55,5 @@
 
         {{ $guru->appends(['search' => request('search')])->links() }}
     </div>
+    <a href="{{ route('admin.guru.export-excel') }}" class="btn btn-success mb-3">Export Excel</a>
 @endsection

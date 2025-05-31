@@ -12,8 +12,18 @@
         </form>
 
         <a href="{{ route('admin.siswa.create') }}" class="btn btn-primary mb-3">Tambah Siswa</a>
+        <hr>
+        <h4>Import Data Siswa dari Excel</h4>
+        <form action="{{ route('admin.siswa.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label>File Excel (.xlsx)</label>
+                <input type="file" name="file" class="form-control" accept=".xlsx" required>
+            </div>
+            <button class="btn btn-secondary">Import</button>
+        </form>
 
-        @if (session('success'))
+    @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
@@ -44,8 +54,7 @@
             @endforeach
             </tbody>
         </table>
-        <div class="d-flex justify-content-center">
             {{ $siswa->appends(['search' => request('search')])->links() }}
-        </div>
+        <a href="{{ route('admin.siswa.export-excel') }}" class="btn btn-success mb-3">Export Excel</a>
     </div>
 @endsection

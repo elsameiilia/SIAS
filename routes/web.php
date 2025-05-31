@@ -68,9 +68,13 @@ Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
-    Route::resource('guru', AdminGuruController::class)->names('admin.guru');
-    Route::resource('kelas', AdminKelasController::class)->names('admin.kelas');
-    Route::resource('siswa', AdminSiswaController::class)->names('admin.siswa');
+    Route::resource('admin/guru', AdminGuruController::class)->names('admin.guru')->except('show');
+    Route::resource('admin/kelas', AdminKelasController::class)->names('admin.kelas')->except('show');
+    Route::resource('/admin/siswa', AdminSiswaController::class)->names('admin.siswa')->except('show');
+    Route::post('/admin/siswa/import', [AdminSiswaController::class, 'import'])->name('admin.siswa.import');
+    Route::get('/admin/siswa/export-excel', [AdminSiswaController::class, 'exportExcel'])->name('admin.siswa.export-excel');
+    Route::post('/admin/guru/import', [AdminGuruController::class, 'import'])->name('admin.guru.import');
+    Route::get('/admin/guru/export-excel', [AdminGuruController::class, 'exportExcel'])->name('admin.guru.export-excel');
 });
 
 Route::get('/test-auth', function () {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminSiswaController extends Controller
 {
@@ -63,5 +66,66 @@ class AdminSiswaController extends Controller
     {
         Siswa::destroy($id);
         return redirect()->route('admin.siswa.index')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
+
+        foreach (array_slice($rows, 1) as $row) {
+            $nama = $row[0];
+            $nis = $row[1];
+            $kelasId = $row[2]; // Pastikan ini sesuai dengan ID dari tabel kelas
+
+            if ($nama && $nis && $kelasId) {
+                Siswa::updateOrCreate(
+                    ['nis' => $nis],
+                    ['nama' => $nama, 'kelas_id' => $kelasId]
+                );
+            }
+        }
+
+        return redirect()->route('admin.siswa.index')->with('success', 'Import data siswa berhasil.');
+    }
+
+    public function exportExcel()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set Header Kolom
+        $sheet->setCellValue('A1', 'Nama');
+        $sheet->setCellValue('B1', 'NIS');
+        $sheet->setCellValue('C1', 'Kelas');
+
+        // Ambil data siswa dari database
+        $siswa = Siswa::with('kelas')->get();
+
+        $row = 2;
+        foreach ($siswa as $s) {
+            $sheet->setCellValue('A' . $row, $s->nama);
+            $sheet->setCellValue('B' . $row, $s->nis);
+            $sheet->setCellValue('C' . $row, $s->kelas->kelas . ' - ' . $s->kelas->sub_kelas);
+            $row++;
+        }
+
+        // Output file Excel ke browser
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'data_siswa.xlsx';
+
+        // Header untuk download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 }
