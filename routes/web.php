@@ -66,6 +66,8 @@ Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
     Route::post('/wakasek/absensi-guru', [WakasekKurikulumController::class, 'simpanAbsenGuru'])->name('wakasek.absen.guru.simpan');
 
     Route::get('/wakasek/monitoring-guru', [WakasekKurikulumController::class, 'monitoringGuru'])->name('wakasek.monitoring.guru');
+    Route::get('/wakasek/rekap-absensi-guru', [WakasekKurikulumController::class, 'rekap'])->name('wakasek.rekap.data');
+    Route::get('/wakasek/rekap-absensi-guru/download', [WakasekKurikulumController::class, 'downloadRekap'])->name('wakasek.rekap.data.download');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

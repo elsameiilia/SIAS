@@ -69,7 +69,7 @@ class WakasekKurikulumController extends Controller
         $tahun = $request->tahun ?? date('Y');
         $search = $request->search;
 
-        $query = User::all()->orderBy('nama');
+        $query = User::orderBy('nama');
 
         if ($search) {
             $query->where('nama', 'like', '%' . $search . '%');
@@ -80,25 +80,25 @@ class WakasekKurikulumController extends Controller
         $data = [];
 
         foreach ($guruPaginated as $g) {
-            $hadir = AbsensiGuru::where('id', $g->id)
+            $hadir = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'hadir')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $sakit = AbsensiGuru::where('id', $g->id)
+            $sakit = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'sakit')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $izin = AbsensiGuru::where('id', $g->id)
+            $izin = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'izin')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $alpha = AbsensiGuru::where('id', $g->id)
+            $alpha = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'alpha')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
@@ -113,7 +113,7 @@ class WakasekKurikulumController extends Controller
             ];
         }
 
-        return view('bk.rekap.index', [
+        return view('wakasek_kurikulum.rekap.index', [
             'guruPaginated' => $guruPaginated,
             'data' => $data,
             'bulan' => $bulan,
@@ -127,7 +127,7 @@ class WakasekKurikulumController extends Controller
         $tahun = $request->tahun ?? date('Y');
         $search = $request->search;
 
-        $query = User::all()->orderBy('nama');
+        $query = User::orderBy('nama');
 
         if ($search) {
             $query->where('nama', 'like', '%' . $search . '%');
@@ -141,41 +141,39 @@ class WakasekKurikulumController extends Controller
         // Header
         $sheet->setCellValue('A1', 'NIS');
         $sheet->setCellValue('B1', 'Nama');
-        $sheet->setCellValue('C1', 'Kelas');
-        $sheet->setCellValue('D1', 'Hadir');
-        $sheet->setCellValue('E1', 'Sakit');
-        $sheet->setCellValue('F1', 'Izin');
-        $sheet->setCellValue('G1', 'Alpha');
-        $sheet->setCellValue('H1', 'Bolos');
+        $sheet->setCellValue('C1', 'Hadir');
+        $sheet->setCellValue('D1', 'Sakit');
+        $sheet->setCellValue('E1', 'Izin');
+        $sheet->setCellValue('F1', 'Alpha');
 
         $row = 2;
 
         foreach ($guruList as $g) {
-            $hadir = AbsensiGuru::where('id', $g->id)
+            $hadir = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'hadir')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $sakit = AbsensiGuru::where('id', $g->id)
+            $sakit = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'sakit')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $izin = AbsensiGuru::where('id', $g->id)
+            $izin = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'izin')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $alpha = AbsensiGuru::where('id', $g->id)
+            $alpha = AbsensiGuru::where('guru_id', $g->id)
                 ->where('status', 'alpha')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->count();
 
-            $sheet->setCellValue('A' . $row, $g->nis);
+            $sheet->setCellValue('A' . $row, $g->nip);
             $sheet->setCellValue('B' . $row, $g->nama);    
             $sheet->setCellValue('C' . $row, $hadir);
             $sheet->setCellValue('D' . $row, $sakit);
