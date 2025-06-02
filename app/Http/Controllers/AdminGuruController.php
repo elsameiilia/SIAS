@@ -121,6 +121,7 @@ class AdminGuruController extends Controller
         // Ambil data siswa dari database
         $user = User::all();
 
+
         $row = 2;
         foreach ($user as $s) {
             $sheet->setCellValue('A' . $row, $s->nama);

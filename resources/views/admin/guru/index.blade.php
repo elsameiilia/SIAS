@@ -54,6 +54,6 @@
         </table>
 
         {{ $guru->appends(['search' => request('search')])->links() }}
+        <a href="{{ route('admin.guru.export-excel') }}" class="btn btn-success mb-3">Export Excel</a>
     </div>
-    <a href="{{ route('admin.guru.export-excel') }}" class="btn btn-success mb-3">Export Excel</a>
 @endsection

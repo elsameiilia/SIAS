@@ -225,7 +225,7 @@ class AbsensiSiswaController extends Controller
             $row++;
         }
 
-        $filename = "Rekap_Absensi_{$bulan}_{$tahun}.xlsx";
+        $filename = "Rekap_Absensi_Siswa_{$bulan}_{$tahun}.xlsx";
         $writer = new Xlsx($spreadsheet);
 
         // Simpan ke output

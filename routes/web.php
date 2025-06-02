@@ -50,7 +50,9 @@ Route::middleware(['auth', 'role:guru_bk'])->group(function () {
     Route::post('/bk/absensi/store', [AbsensiSiswaController::class, 'store'])->name('bk.absensi.store');
     Route::get('/bk/absensi/{id}/edit', [AbsensiSiswaController::class, 'edit'])->name('bk.absensi.edit');
     Route::put('/bk/absensi/{id}', [AbsensiSiswaController::class, 'update'])->name('bk.absensi.update');
-    Route::get('bk/monitoring-bolos', [BkDashboardController::class,'bolos'])->name('bk.bolos.index');
+    Route::get('/bk/monitoring-bolos', [BkDashboardController::class,'bolos'])->name('bk.bolos.index');
+    Route::get('/bk/rekap-data-siswa',[AbsensiSiswaController::class,'rekap'])->name('bk.rekap.data');
+    Route::get('/bk/rekap-data-siswa/download',[AbsensiSiswaController::class,'downloadRekap'])->name('bk.rekap.data.download');
 });
 
 Route::middleware(['auth', 'role:wakasek_kesiswaan'])->group(function () {

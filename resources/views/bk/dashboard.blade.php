@@ -15,5 +15,7 @@
         </div>
         <h3>Form Bolos</h3>
         <a href="{{ route('bk.bolos.index') }}" class="btn btn-secondary mt-3">Monitoring Bolos</a>
+        <h3>Form Bolos</h3>
+        <a href="{{ route('bk.rekap.data') }}" class="btn btn-secondary mt-3">Rekap Data</a>
     </div>
 @endsection
