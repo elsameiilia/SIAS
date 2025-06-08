@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminKelasController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\KepalaSekolahController;
+use App\Http\Controllers\WakasekKesiswaanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AbsensiSiswaController;
@@ -22,12 +25,15 @@ Route::get('/', function () {
     return match ($user->role) {
         'guru_pengajar' => redirect()->route('guru.dashboard'),
         'guru_bk' => redirect()->route('bk.dashboard'),
-        'wakasek_kesiswaan' => redirect('/dashboard/wakasek-kesiswaan'),
-        'wakasek_kurikulum' => redirect()->route('wakasek.dashboard'),
-        'admin' => redirect('/admin/dashboard'),
+        'wakasek_kesiswaan' => redirect()->route('wakasek.kesiswaan.dashboard'),
+        'wakasek_kurikulum' => redirect()->route('wakasek.kurikulum.dashboard'),
+        'admin' => redirect()->route('admin.dashboard'),
         default => abort(403, 'Role tidak dikenali.'),
     };
 });
+
+Route::get('/forgot-password',[ForgotPasswordController::class,'index'])->name('forgot-password');
+Route::post('/forgot-password/save',[ForgotPasswordController::class,'savePassword'])->name('forgot-password.save');
 
 Route::middleware(['auth', 'role:guru_pengajar'])->group(function () {
     Route::get('/guru/dashboard', [GuruController::class, 'index'])->name('guru.dashboard');
@@ -44,8 +50,8 @@ Route::middleware(['auth', 'role:guru_bk'])->group(function () {
     Route::get('/bk/dashboard', [BkDashboardController::class, 'index'])->name('bk.dashboard');
     Route::get('/bk/kelas', [AbsensiSiswaController::class, 'kelasList'])->name('bk.kelas');
     Route::get('/bk/kelas/{kelas}/sub', [AbsensiSiswaController::class, 'listSubKelas'])->name('bk.kelas.listSub');
-    Route::get('bk/kelas/{kelas_id}', [AbsensiSiswaController::class, 'listAbsensiByKelas'])->name('bk.kelas.detail');
-    Route::get('/bk/kelas/{kelas_id}/tanggal/{tanggal}', [AbsensiSiswaController::class, 'listByTanggal'])->name('bk.kelas.tanggal');
+    Route::get('bk/absensi-kelas/{kelas_id}', [AbsensiSiswaController::class, 'listAbsensiByKelas'])->name('bk.kelas.detail');
+    Route::get('/bk/absensi-kelas/{kelas_id}/tanggal/{tanggal}', [AbsensiSiswaController::class, 'listByTanggal'])->name('bk.kelas.tanggal');
     Route::get('/bk/absensi/create/{siswa_id}/{tanggal}', [AbsensiSiswaController::class, 'create'])->name('bk.absensi.create');
     Route::post('/bk/absensi/store', [AbsensiSiswaController::class, 'store'])->name('bk.absensi.store');
     Route::get('/bk/absensi/{id}/edit', [AbsensiSiswaController::class, 'edit'])->name('bk.absensi.edit');
@@ -56,18 +62,23 @@ Route::middleware(['auth', 'role:guru_bk'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:wakasek_kesiswaan'])->group(function () {
-    Route::get('/dashboard/wakasek-kesiswaan', fn() => view('dashboard.wakasek-kesiswaan'));
+    Route::get('/wakasek-kesiswaan/dashboard', [WakasekKesiswaanController::class, 'index'])->name('wakasek.kesiswaan.dashboard');
+    Route::get('/wakasek-kesiswaan/kelas', [WakasekKesiswaanController::class, 'kelasList'])->name('wakasek.kesiswaan.kelas');
+    Route::get('/wakasek-kesiswaan/kelas/{kelas}/sub', [WakasekKesiswaanController::class, 'listSubKelas'])->name('wakasek.kesiswaan.kelas.listSub');
+    Route::get('/wakasek-kesiswaan/absensi-kelas/{kelas_id}', [WakasekKesiswaanController::class, 'listAbsensiByKelas'])->name('wakasek.kesiswaan.kelas.detail');
+    Route::get('/wakasek-kesiswaan/absensi-kelas/{kelas_id}/tanggal/{tanggal}', [WakasekKesiswaanController::class, 'listByTanggal'])->name('wakasek.kesiswaan.kelas.tanggal');
+    Route::get('/wakasek-kesiswaan/monitoring-bolos', [WakasekKesiswaanController::class,'bolos'])->name('wakasek.kesiswaan.bolos.index');
+    Route::get('/wakasek-kesiswaan/rekap-data-siswa',[WakasekKesiswaanController::class,'rekap'])->name('wakasek.kesiswaan.rekap.data');
+    Route::get('/wakasek-kesiswaan/rekap-data-siswa/download',[WakasekKesiswaanController::class,'downloadRekap'])->name('wakasek.kesiswaan.rekap.data.download');
 });
 
 Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
-    Route::get('/wakasek/dashboard', [WakasekKurikulumController::class, 'dashboard'])->name('wakasek.dashboard');
-
-    Route::get('/wakasek/absensi-guru', [WakasekKurikulumController::class, 'absenGuruForm'])->name('wakasek.absen.guru');
-    Route::post('/wakasek/absensi-guru', [WakasekKurikulumController::class, 'simpanAbsenGuru'])->name('wakasek.absen.guru.simpan');
-
-    Route::get('/wakasek/monitoring-guru', [WakasekKurikulumController::class, 'monitoringGuru'])->name('wakasek.monitoring.guru');
-    Route::get('/wakasek/rekap-absensi-guru', [WakasekKurikulumController::class, 'rekap'])->name('wakasek.rekap.data');
-    Route::get('/wakasek/rekap-absensi-guru/download', [WakasekKurikulumController::class, 'downloadRekap'])->name('wakasek.rekap.data.download');
+    Route::get('/wakasek-kurikulum/dashboard', [WakasekKurikulumController::class, 'dashboard'])->name('wakasek.kurikulum.dashboard');
+    Route::get('/wakasek-kurikulum/absensi-guru', [WakasekKurikulumController::class, 'absenGuruForm'])->name('wakasek.kurikulum.absen.guru');
+    Route::post('/wakasek-kurikulum/absensi-guru', [WakasekKurikulumController::class, 'simpanAbsenGuru'])->name('wakasek.kurikulum.absen.guru.simpan');
+    Route::get('/wakasek-kurikulum/monitoring-guru', [WakasekKurikulumController::class, 'monitoringGuru'])->name('wakasek.kurikulum.monitoring.guru');
+    Route::get('/wakasek-kurikulum/rekap-absensi-guru', [WakasekKurikulumController::class, 'rekap'])->name('wakasek.kurikulum.rekap.data');
+    Route::get('/wakasek-kurikulum/rekap-absensi-guru/download', [WakasekKurikulumController::class, 'downloadRekap'])->name('wakasek.kurikulum.rekap.data.download');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -81,6 +92,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/guru/export-excel', [AdminGuruController::class, 'exportExcel'])->name('admin.guru.export-excel');
 });
 
+Route::middleware(['auth', 'role:kepala_sekolah'])->group(function () {
+    Route::get('/kepala-sekolah/dashboard',[KepalaSekolahController::class, 'index'])->name('kepala.sekolah');
+    Route::get('/kepala-sekolah/kelas', [KepalaSekolahController::class, 'kelasList'])->name('kepala.sekolah.kelas');
+    Route::get('/kepala-sekolah/kelas/{kelas}/sub', [KepalaSekolahController::class, 'listSubKelas'])->name('kepala.sekolah.kelas.listSub');
+    Route::get('/kepala-sekolah/absensi-kelas/{kelas_id}', [KepalaSekolahController::class, 'listAbsensiByKelas'])->name('kepala.sekolah.kelas.detail');
+    Route::get('/kepala-sekolah/absensi-kelas/{kelas_id}/tanggal/{tanggal}', [KepalaSekolahController::class, 'listByTanggal'])->name('kepala.sekolah.kelas.tanggal');
+    Route::get('/kepala-sekolah/monitoring-bolos', [KepalaSekolahController::class,'bolos'])->name('kepala.sekolah.bolos.index');
+    Route::get('/kepala-sekolah/rekap-data-siswa',[KepalaSekolahController::class,'rekap'])->name('kepala.sekolah.rekap.data');
+    Route::get('/kepala-sekolah/rekap-data-siswa/download',[KepalaSekolahController::class,'downloadRekap'])->name('kepala.sekolah.rekap.data.siswa.download');
+    Route::get('/kepala-sekolah/monitoring-guru', [KepalaSekolahController::class, 'monitoringGuru'])->name('kepala.sekolah.monitoring.guru');
+    Route::get('/kepala-sekolah/rekap-absensi-guru', [KepalaSekolahController::class, 'rekap'])->name('kepala.sekolah.rekap.data');
+    Route::get('/kepala-sekolah/rekap-absensi-guru/download', [KepalaSekolahController::class, 'downloadRekap'])->name('kepala.sekolah.rekap.data.guru.download');
+});
+
 Route::get('/test-auth', function () {
-    return auth()->user(); // Apakah ini mengembalikan user atau null?
+    return auth()->user();
 });

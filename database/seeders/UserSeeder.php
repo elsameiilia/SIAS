@@ -64,6 +64,12 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password')
             ],
             [
+              'nama' => 'Jajang',
+              'nip'=>'5001',
+              'role' => 'kepala_sekolah',
+              'password' => Hash::make('password')
+            ],
+            [
                 'nama' => 'Arya',
                 'nip' => 'admin123',
                 'role' => 'admin',

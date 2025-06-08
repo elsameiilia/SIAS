@@ -44,8 +44,8 @@ class LoginController extends Controller
             'admin' => redirect('/admin/dashboard'),
             'guru_pengajar' => redirect('guru/dashboard'),
             'guru_bk' => redirect('/bk/dashboard'),
-            'wakasek_kesiswaan' => redirect('/wakasek/dashboard'),
-            'wakasek_kurikulum' => redirect('/wakasek/dashboard'),
+            'wakasek_kesiswaan' => redirect('/wakasek-kesiswaan/dashboard'),
+            'wakasek_kurikulum' => redirect('/wakasek-kurikulum/dashboard'),
             default => redirect('/'),
         };
     }
