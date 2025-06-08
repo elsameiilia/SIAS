@@ -3,9 +3,13 @@
 @section('content')
     <div class="container">
         <h3>Form Bolos</h3>
+        @if (session('failed'))
+            <div class="alert alert-danger">
+                {{ session('failed') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('guru.bolos.simpan') }}">
             @csrf
-
             <div class="mb-3">
                 <label for="kelas" class="form-label">Kelas</label>
                 <select id="kelas" class="form-select">

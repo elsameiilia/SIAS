@@ -136,17 +136,26 @@ class GuruController extends Controller
         $jam = $hari->format('H:i:s');
         $namaHari = $hari->translatedFormat('l');
         $kelas_id = $request->kelas_id;
-        $jadwal = Jadwal::where('hari', $namaHari)
-            ->where('kelas_id', $kelas_id)
-            ->where('jam_mulai', '<=', $jam)
-            ->where('jam_selesai', '>=', $jam)
-            ->first();
-        Bolos::create([
-            'siswa_id' => $request->siswa_id,
-            'keterangan' => $request->keterangan,
-            'jadwal_id' => $jadwal->jadwal_id,
-        ]);
+        $absenHariIni = AbsensiSiswa::where('siswa_id', $request->siswa_id)
+            ->whereDate('created_at', Carbon::today())
+            ->where('status', 'hadir')
+            ->exists();
+        if($absenHariIni){
+            $jadwal = Jadwal::where('hari', $namaHari)
+                ->where('kelas_id', $kelas_id)
+                ->where('jam_mulai', '<=', $jam)
+                ->where('jam_selesai', '>=', $jam)
+                ->first();
+            Bolos::create([
+                'siswa_id' => $request->siswa_id,
+                'keterangan' => $request->keterangan,
+                'jadwal_id' => $jadwal->jadwal_id,
+            ]);
 
-        return redirect()->route('guru.dashboard')->with('success', 'Form bolos berhasil dikirim.');
+            return redirect()->route('guru.dashboard')->with('success', 'Form bolos berhasil dikirim.');
+        }
+        else{
+            return redirect()->route('guru.form.bolos')->with('failed', 'Form bolos gagal dikirim. Kemungkinan murid sedang sakit/izin/alpha atau belum diabsenkan');
+        }
     }
 }

@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <h3>Pilih Tingkat Kelas</h3>
         <div class="list-group">
             @foreach($tingkat as $t)

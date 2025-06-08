@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
         <h3>Monitoring Siswa Bolos</h3>
-
         <form method="GET" action="{{ route('bk.bolos.index') }}" class="mb-3">
             <label for="tanggal">Pilih Tanggal:</label>
             <input type="date" id="tanggal" name="tanggal" value="{{ $tanggal }}">
