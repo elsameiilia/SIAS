@@ -7,6 +7,7 @@ use App\Http\Controllers\WakasekKesiswaanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AbsensiSiswaController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\BkDashboardController;
 use App\Http\Controllers\WakasekKurikulumController;
@@ -82,7 +83,7 @@ Route::middleware(['auth', 'role:wakasek_kurikulum'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('admin/guru', AdminGuruController::class)->names('admin.guru')->except('show');
     Route::resource('admin/kelas', AdminKelasController::class)->names('admin.kelas')->except('show');
     Route::resource('/admin/siswa', AdminSiswaController::class)->names('admin.siswa')->except('show');

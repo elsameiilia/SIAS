@@ -55,7 +55,7 @@ class WakasekKesiswaanController extends Controller
             ->whereDate('created_at', $tanggal)
             ->get();
 
-        return view('wakasek-kesiswaan.bolos.index', compact('bolos', 'tanggal'));
+        return view('wakasek_kesiswaan.bolos.index', compact('bolos', 'tanggal'));
     }
 
     public function rekap(Request $request)

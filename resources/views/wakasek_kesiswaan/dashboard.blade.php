@@ -1,21 +1,41 @@
-@extends('layouts.app')
+@extends('layouts.navbarkesis')
 
 @section('content')
-    <div class="container">
-        <h2>Dashboard Guru BK</h2>
-        <p>Pilih Tingkat Kelas:</p>
-        <div class="row">
-            @foreach ($tingkatKelas as $tingkat)
-                <div class="col-md-4 mb-3">
-                    <a href="{{ route('wakasek.kesiswaan.kelas.listSub', $tingkat->kelas) }}" class="btn btn-outline-primary w-100">
-                        Kelas {{ $tingkat->kelas }}
+
+    <style>
+        .class-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .class-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+    </style>
+
+    <h1 class="h2 mb-4 fw-bold">Dashboard Wakasek Kesiswaan</h1>
+    <p>Selamat datang, {{ Auth::user()->nama }}!</p>
+
+    <h4 class="mt-5 mb-3">Pilih Tingkat Kelas</h4>
+    <div class="row g-4">
+        @isset($tingkatKelas)
+            @forelse ($tingkatKelas as $tingkat)
+                <div class="col-md-4">
+                    <a href="{{ route('wakasek.kesiswaan.kelas.listSub', $tingkat->kelas) }}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm class-card" style="border-radius: 15px; border:0;">
+                            <div class="card-body d-flex align-items-center p-4">
+                                <h5 class="card-title mb-0 fw-bold">Kelas {{ $tingkat->kelas }}</h5>
+                            </div>
+                        </div>
                     </a>
                 </div>
-            @endforeach
-        </div>
-        <h3>Form Bolos</h3>
-        <a href="{{ route('wakasek.kesiswaan.bolos.index') }}" class="btn btn-secondary mt-3">Monitoring Bolos</a>
-        <h3>Form Bolos</h3>
-        <a href="{{ route('wakasek.kesiswaan.rekap.data') }}" class="btn btn-secondary mt-3">Rekap Data</a>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        Tidak ada data tingkat kelas yang tersedia saat ini.
+                    </div>
+                </div>
+            @endforelse
+        @endisset
     </div>
+
 @endsection

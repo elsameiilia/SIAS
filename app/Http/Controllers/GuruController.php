@@ -14,10 +14,10 @@ class GuruController extends Controller
 {
     public function index()
     {
-        // Menampilkan kelas 7, 8, 9 (distinct)
-        $tingkat = Kelas::select('kelas')->distinct()->pluck('kelas');
-        return view('guru.dashboard', compact('tingkat'));
+        $tingkatKelas = Kelas::select('kelas')->distinct()->get();
+        return view('guru.dashboard', compact('tingkatKelas'));
     }
+
 
     public function listSubkelas($tingkat)
     {
