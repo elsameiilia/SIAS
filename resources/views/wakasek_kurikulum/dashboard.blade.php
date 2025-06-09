@@ -11,6 +11,8 @@
 </style>
 
 <h1 class="h2 mb-4 fw-bold">Dashboard</h1>
+
+<h4>dem ini mnrtmu dipake gak kira-kira? niatnya tuh sbnrnya ntar dikasih count guru from table gitu, tapi ntar merubah controller. buang aja bang kalo repot, soalnya bingung jg mau dikasih apaan</h4>
 <div class="card text-white" style="background-color: #1E6042; border-radius: 20px;">
     <div class="card-body p-4">
         <div class="row gy-4 gy-md-0 align-items-center text-center">
